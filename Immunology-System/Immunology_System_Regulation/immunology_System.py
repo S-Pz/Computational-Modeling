@@ -74,7 +74,7 @@ def solveSystem(time, dt, y0, method):
 
     #alpha, alpha_2, betha, betha_2, gama, gama_2, m, m2, m3, i, k
      
-    parameters = [0.1,0.2,0.2,0.1,0.1,1,0.01,0.3,0.4,0.02,0.002]
+    parameters = [0.2,0.1,0.2,0.15,0.15,0.8,0.05,0.2,0.3,0.01,0.001]
 
     if method == "euler":
         for t in time:
