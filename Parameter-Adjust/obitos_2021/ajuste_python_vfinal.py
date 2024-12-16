@@ -1,0 +1,145 @@
+import numpy as np
+import pandas as pd
+from scipy.integrate import  solve_ivp
+from scipy.optimize import differential_evolution
+import math
+import matplotlib.pyplot as plt 
+
+#data_path = './I.csv'
+data_path = './casos_2021.xlsx'
+data_path = './obitos_2021.xlsx'
+
+dt = 0.01
+tfinal = 55
+times = np.arange(0,tfinal+dt,dt)
+
+S0 = 90082.0
+I0 = 203.0 #203
+R0 = 0.0
+
+def odeSystem_SIRS_M(t,u, beta, alpha, gamma, d):
+    
+    S, I, R, M = u
+    dS_dt = -beta * S * I + gamma * R
+    dI_dt = beta * S * I - alpha * I - d*I
+    dR_dt = alpha * I - gamma * R
+    dM_dt = d * I
+    
+    return [dS_dt, dI_dt, dR_dt, dM_dt]  
+
+def isReferenceTime(times, ct):
+    for t in times: 
+        if (abs(ct - t) <= 10**(-5)):
+            return True 
+    return False
+
+def solve(x):
+    global data, reference_times, obito
+
+    u = [S0, I0, R0, 0]
+
+    beta = x[0]
+    alpha = x[1]
+    gamma = x[2]
+    d = x[3]
+
+    params = (beta, alpha, gamma, d)
+    
+    def solveOde(t, y):
+        return odeSystem_SIRS_M(t, y, *params)
+
+    results = solve_ivp(solveOde,(0, tfinal), u, t_eval=times, method='RK45')    
+
+    u = results.y[1,:]#I
+    v = results.y[3,:]#M
+    
+    error = 0
+    sumobs = 0
+    
+    i = 0
+    j = 0    
+    
+    error_M = 0
+    sumobs_M = 0
+
+
+    for t in times:
+        if isReferenceTime(reference_times,t):
+            p_data = data["I"][i]
+            error += (u[j] - p_data)*(u[j] - p_data) 
+            sumobs += p_data*p_data
+
+            M = obito["I"][i]
+            error_M += (v[j] - M)*(v[j] - M) 
+            sumobs_M += M*M
+
+            i = i + 1
+        j = j + 1
+
+    error = math.sqrt(error/sumobs) + math.sqrt(error_M/sumobs_M) #Erro norma 2   
+
+    return error 
+
+if __name__ == "__main__":
+    
+    global data, reference_times , obito
+
+    data = pd.read_excel('./casos_2021.xlsx')
+    obito = pd.read_excel('./obitos_2021.xlsx')
+
+    reference_times = data["Semana"]
+    dados_I = data["I"]
+    dados_obitos = obito["I"]
+
+    #plota os dados experimentais 
+    fig = plt.figure()
+    fig.set_size_inches(8, 6)
+    plt.scatter(reference_times, dados_I, marker='o', color='black', label='dados')
+    
+    bounds = [
+        (0.00001, 0.01),
+        (0.01, 0.9),
+        (0.001, 0.1), #gama
+        (0.001, 0.5), #d
+    ]
+
+    #chama evolução diferencial, result contém o melhor individuo
+    solucao = differential_evolution(solve, bounds, strategy='rand2bin', maxiter=50, popsize=40,atol=10**(-3), tol=10**(-3), mutation=0.8, recombination=0.5, disp=True, workers=4)
+    
+    print(solucao.x)
+    #saving the best offspring...
+    np.savetxt('solucao_ajuste.txt',solucao.x, fmt='%.6f')        
+    best = solucao.x
+    error = solve(best)
+    #print("ERROR ", error)
+    print(solucao.population)
+    print(solucao.population_energies)
+    
+    u = [S0, I0, R0, 0]
+    result_best = solve_ivp(odeSystem_SIRS_M,(0, tfinal+dt), u, t_eval=times, args=best, method='RK45')
+    plt.plot(result_best.t, result_best.y[1,:], color='red', label='I')
+    plt.legend(loc='best')    
+    fig.savefig('I.png', format='png')
+    plt.show()    
+
+    fig = plt.figure()
+    fig.set_size_inches(8, 6)
+    plt.plot(result_best.t, result_best.y[0,:], color='blue', label='S')
+    plt.legend(loc='best')
+    fig.savefig('S.png', format='png')
+    plt.show()
+    
+    fig = plt.figure()
+    fig.set_size_inches(8, 6)
+    plt.plot(result_best.t, result_best.y[2,:], color='green', label='R')
+    plt.legend(loc='best')
+    fig.savefig('R.png', format='png')
+    plt.show()
+
+    fig = plt.figure()
+    fig.set_size_inches(8, 6)
+    plt.scatter(reference_times, dados_obitos, marker='o', color='pink', label='dados')
+    plt.plot(result_best.t, result_best.y[3,:], color='grey', label='M')
+    plt.legend(loc='best')    
+    fig.savefig('M.png', format='png')
+    plt.show()  

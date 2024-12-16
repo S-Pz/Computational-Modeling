@@ -22,12 +22,13 @@ def ode_system(t, u, constants):
     k = constants[10]
     
     N = u[0]
-    MREG = u[1]
+    TD = u[1]
     CH = u[2]
-    AC = u[3]
-    TD = u[4]
+    MREG = u[3]
+    AC = u[4]
     
-    dNdt = (alpha*N) + (betha*CH)/(1+i*AC) + (betha_2*TD) 
+    
+    dNdt = (-alpha*N) + (betha*CH)/(1+i*AC) + (betha_2*TD) 
     dTDdt = (alpha*N) - (k*MREG*TD)
     dCHdt = (gama * N)/(1+i*AC) - (m*CH)
     dMREGdt = (alpha_2 * N) - (m2*MREG)
@@ -74,8 +75,8 @@ def solveSystem(time, dt, y0, method):
 
     #alpha, alpha_2, betha, betha_2, gama, gama_2, m, m2, m3, i, k
      
-    parameters = [0.2,0.1,0.2,0.15,0.15,0.8,0.05,0.2,0.3,0.01,0.001]
-
+    #parameters = [0.2,0.5,0.2,0.15,0.15,0.5,0.05,0.2,0.3,0.5,0.1] #controle maior da inflamacao, regulacao efetiva
+    parameters = [0.2,0.1,0.2,0.15,0.15,0.1,0.05,0.2,0.3,0.5,0.1]
     if method == "euler":
         for t in time:
             state.append(yk)
@@ -109,11 +110,11 @@ def plot(time, state, names):
 
 if __name__ == "__main__":
 
-    names = ['N','MREG','CH','AC','TD']
+    names = ['N','TD','CH','MREG','AC']
     dt = 0.01
-    tfinal = 50
+    tfinal = 150
     time = np.arange(0, tfinal + dt, dt)
-    initial_condition = np.array([0,0,0,0,10])
+    initial_condition = np.array([0,10,0,0,0])
     result = solveSystem(time, dt, initial_condition, "rk4")
     save(time, result, names)
     plot(time, result, names)
