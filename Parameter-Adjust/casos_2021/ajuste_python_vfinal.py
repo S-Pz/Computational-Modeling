@@ -1,9 +1,11 @@
+import math
+
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt 
+
 from scipy.integrate import  solve_ivp
 from scipy.optimize import differential_evolution
-import math
-import matplotlib.pyplot as plt 
 
 data_path = './casos_2021.xlsx'
 
@@ -74,14 +76,27 @@ if __name__ == "__main__":
     fig.set_size_inches(8, 6)
     plt.scatter(reference_times, dados_I, marker='o', color='black', label='dados')
     
+    # bounds = [
+    #     (0.00001, 0.01),  # beta
+    #     (0.01, 0.9),      # alpha
+    #     (0.01, 0.9)      # gamma 
+    # ]
+
+    #bons ajustes 
+    # bounds = [
+    #     (0.00001, 0.01),  # beta
+    #     (0.01, 0.9),      # alpha
+    #     (0.01, 0.8)      # gamma 
+    # ]
+
     bounds = [
         (0.00001, 0.01),  # beta
         (0.01, 0.9),      # alpha
-        (0.001, 0.1)      # gamma 
+        (0.001, 0.9)      # gamma 
     ]
 
     #chama evolução diferencial, result contém o melhor individuo
-    solucao = differential_evolution(solve, bounds, strategy='rand2bin', maxiter=50, popsize=40, atol=10**(-3), tol=10**(-3), mutation=0.8, recombination=0.5, disp=True, workers=4)    
+    solucao = differential_evolution(solve, bounds, strategy='rand1bin', maxiter=50, popsize=40, atol=10**(-3), tol=10**(-3), mutation=0.8, recombination=0.5, disp=True, workers=4)    
     print(solucao.x)
     #saving the best offspring...
     np.savetxt('solucao_ajuste.txt',solucao.x, fmt='%.6f')        
