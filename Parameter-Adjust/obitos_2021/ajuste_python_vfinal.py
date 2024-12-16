@@ -1,13 +1,14 @@
+import math
+
 import numpy as np
 import pandas as pd
-from scipy.integrate import  solve_ivp
-from scipy.optimize import differential_evolution
-import math
 import matplotlib.pyplot as plt 
 
-#data_path = './I.csv'
-data_path = './casos_2021.xlsx'
-data_path = './obitos_2021.xlsx'
+from scipy.integrate import  solve_ivp
+from scipy.optimize import differential_evolution
+
+data_casos = './casos_2021.xlsx'
+data_obitos = './obitos_2021.xlsx'
 
 dt = 0.01
 tfinal = 55
@@ -82,10 +83,10 @@ def solve(x):
 
 if __name__ == "__main__":
     
-    global data, reference_times , obito
+    global data, reference_times, obito
 
-    data = pd.read_excel('./casos_2021.xlsx')
-    obito = pd.read_excel('./obitos_2021.xlsx')
+    data = pd.read_excel(data_casos)
+    obito = pd.read_excel(data_obitos)
 
     reference_times = data["Semana"]
     dados_I = data["I"]
@@ -96,15 +97,38 @@ if __name__ == "__main__":
     fig.set_size_inches(8, 6)
     plt.scatter(reference_times, dados_I, marker='o', color='black', label='dados')
     
+
+    # bounds = [
+    #     (0.00001, 0.01),
+    #     (0.01, 0.9),
+    #     (0.001, 0.9), #gama
+    #     (0.0009, 0.01), #d
+    # ]
+
     bounds = [
         (0.00001, 0.01),
         (0.01, 0.9),
-        (0.001, 0.1), #gama
-        (0.001, 0.5), #d
+        (0.001, 0.9), #gama
+        (0.0001, 0.001), #d
     ]
+    
+    # bounds = [
+    #     (0.00001, 0.01),
+    #     (0.01, 0.9),
+    #     (0.001, 0.9), #gama
+    #     (0.0001, 0.01), #d
+    # ]
+
+    #n de mortes muito bom
+    # bounds = [
+    #     (0.00001, 0.01),
+    #     (0.01, 0.9),
+    #     (0.001, 0.01), #gama
+    #     (0.001, 0.5), #d
+    # ]
 
     #chama evolução diferencial, result contém o melhor individuo
-    solucao = differential_evolution(solve, bounds, strategy='rand2bin', maxiter=50, popsize=40,atol=10**(-3), tol=10**(-3), mutation=0.8, recombination=0.5, disp=True, workers=4)
+    solucao = differential_evolution(solve, bounds, strategy='best2bin', maxiter=50, popsize=40,atol=10**(-3), tol=10**(-3), mutation=0.8, recombination=0.5, disp=True, workers=12)
     
     print(solucao.x)
     #saving the best offspring...
@@ -139,7 +163,7 @@ if __name__ == "__main__":
     fig = plt.figure()
     fig.set_size_inches(8, 6)
     plt.scatter(reference_times, dados_obitos, marker='o', color='pink', label='dados')
-    plt.plot(result_best.t, result_best.y[3,:], color='grey', label='M')
+    plt.plot(result_best.t, result_best.y[3,:], color='black', label='M')
     plt.legend(loc='best')    
     fig.savefig('M.png', format='png')
     plt.show()  
