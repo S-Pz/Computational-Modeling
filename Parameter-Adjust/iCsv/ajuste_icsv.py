@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 data_path = './I.csv'
 
 dt = 0.01
-tfinal = 50
+tfinal = 55
 times = np.arange(0,tfinal+dt,dt)
 
 S0 = 90082.0

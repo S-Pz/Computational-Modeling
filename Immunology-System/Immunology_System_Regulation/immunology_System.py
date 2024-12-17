@@ -76,7 +76,7 @@ def solveSystem(time, dt, y0, method):
     #alpha, alpha_2, betha, betha_2, gama, gama_2, m, m2, m3, i, k
      
     #parameters = [0.2,0.5,0.2,0.15,0.15,0.5,0.05,0.2,0.3,0.5,0.1] #controle maior da inflamacao, regulacao efetiva
-    parameters = [0.2,0.1,0.2,0.15,0.15,0.1,0.05,0.2,0.3,0.5,0.1]
+    parameters = [0.2,0.1,0.2,0.15,0.15,0.1,0.05,0.2,0.3,0.5,0.1] # controle menor da inflamacao
     
     if method == "euler":
         for t in time:
