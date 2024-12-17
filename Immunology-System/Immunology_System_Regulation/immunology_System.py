@@ -77,6 +77,7 @@ def solveSystem(time, dt, y0, method):
      
     #parameters = [0.2,0.5,0.2,0.15,0.15,0.5,0.05,0.2,0.3,0.5,0.1] #controle maior da inflamacao, regulacao efetiva
     parameters = [0.2,0.1,0.2,0.15,0.15,0.1,0.05,0.2,0.3,0.5,0.1]
+    
     if method == "euler":
         for t in time:
             state.append(yk)

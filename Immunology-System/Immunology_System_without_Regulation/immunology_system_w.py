@@ -61,7 +61,7 @@ def solveSystem(time, dt, y0, method):
     yk = y0
     state = []
     
-    #Adicionar a ordem dos parâmetros
+    #Alpha, Betha, Betha_2, Gama, M
     parameters = [0.1,0.1,0.1,0.1,0.1]
 
     if method == "euler":
