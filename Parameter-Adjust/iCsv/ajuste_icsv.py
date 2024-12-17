@@ -73,7 +73,8 @@ if __name__ == "__main__":
     plt.scatter(reference_times, dados_I, marker='o', color='black', label='dados')
     
     bounds = [
-        (0.00001, 0.01), (0.01, 0.9)
+        (0.00001, 0.01),
+        (0.01, 0.9)
     ]
 
     #chama evolução diferencial, result contém o melhor individuo

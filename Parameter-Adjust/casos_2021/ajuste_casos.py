@@ -83,20 +83,20 @@ if __name__ == "__main__":
     # ]
 
     #bons ajustes 
-    # bounds = [
-    #     (0.00001, 0.01),  # beta
-    #     (0.01, 0.9),      # alpha
-    #     (0.01, 0.8)      # gamma 
-    # ]
-
     bounds = [
         (0.00001, 0.01),  # beta
         (0.01, 0.9),      # alpha
-        (0.001, 0.9)      # gamma 
+        (0.01, 0.8)      # gamma 
     ]
 
+    # bounds = [
+    #     (0.00001, 0.01),  # beta
+    #     (0.01, 0.9),      # alpha
+    #     (0.001, 0.9)      # gamma 
+    # ]
+
     #chama evolução diferencial, result contém o melhor individuo
-    solucao = differential_evolution(solve, bounds, strategy='rand1bin', maxiter=50, popsize=40, atol=10**(-3), tol=10**(-3), mutation=0.8, recombination=0.5, disp=True, workers=4)    
+    solucao = differential_evolution(solve, bounds, strategy='best2bin', maxiter=50, popsize=40, atol=10**(-3), tol=10**(-3), mutation=0.8, recombination=0.5, disp=True, workers=4)    
     print(solucao.x)
     #saving the best offspring...
     np.savetxt('solucao_ajuste.txt',solucao.x, fmt='%.6f')        
