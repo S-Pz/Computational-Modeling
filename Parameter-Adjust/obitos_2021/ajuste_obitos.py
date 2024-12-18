@@ -98,12 +98,12 @@ if __name__ == "__main__":
     plt.scatter(reference_times, dados_I, marker='o', color='black', label='dados')
     
 
-    bounds = [
-        (0.00001, 0.0001),
-        (0.01, 0.9),
-        (0.01, 0.9), #gama
-        (0.001, 0.01), #d
-    ]
+    # bounds = [
+    #     (0.00001, 0.0001),
+    #     (0.01, 0.9),
+    #     (0.01, 0.9), #gama
+    #     (0.001, 0.01), #d
+    # ]
 
     # bounds = [
     #     (0.00001, 0.01),
@@ -127,15 +127,15 @@ if __name__ == "__main__":
     # ]
 
     #n de mortes muito bom
-    # bounds = [
-    #     (0.00001, 0.01),
-    #     (0.01, 0.9),
-    #     (0.001, 0.01), #gama
-    #     (0.001, 0.5), #d
-    # ]
+    bounds = [
+        (0.00001, 0.01),
+        (0.01, 0.9),
+        (0.001, 0.01), #gama
+        (0.001, 0.5), #d
+    ]
 
     #chama evolução diferencial, result contém o melhor individuo
-    solucao = differential_evolution(solve, bounds, strategy='best2bin', maxiter=50, popsize=40,atol=10**(-3), tol=10**(-3), mutation=0.8, recombination=0.5, disp=True, workers=12)
+    solucao = differential_evolution(solve, bounds, strategy='rand2bin', maxiter=50, popsize=40,atol=10**(-3), tol=10**(-3), mutation=0.8, recombination=0.5, disp=True, workers=12)
     
     print(solucao.x)
     #saving the best offspring...

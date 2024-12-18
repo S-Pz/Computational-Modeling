@@ -96,7 +96,7 @@ if __name__ == "__main__":
     # ]
 
     #chama evolução diferencial, result contém o melhor individuo
-    solucao = differential_evolution(solve, bounds, strategy='rand2bin', maxiter=50, popsize=40, atol=10**(-3), tol=10**(-3), mutation=0.8, recombination=0.5, disp=True, workers=4)    
+    solucao = differential_evolution(solve, bounds, strategy='best2bin', maxiter=50, popsize=40, atol=10**(-3), tol=10**(-3), mutation=0.8, recombination=0.5, disp=True, workers=4)    
     print(solucao.x)
     #saving the best offspring...
     np.savetxt('solucao_ajuste.txt',solucao.x, fmt='%.6f')        
