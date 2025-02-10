@@ -12,7 +12,7 @@
 float 
     pmin = 0.001, // Densidade mínima espécie P
     pmax = 1.0, // Densidade máxima espécie P
-    rh = 1.5, // Taxa de crescimento espécie H
+    rh = 0.5, // Taxa de crescimento espécie H
     rp = 0.5, // Taxa de crescimento espécie P
     w1 = 1, // Peso competição espécie H
     w2 = 1, // Peso competição espécie P
