@@ -1,4 +1,14 @@
-#Directory
+#Ignore VSCode directory
 .vscode/
 .venv/
 __pycache__/
+/build/
+
+# ignore possibly built binary
+main
+ca.cpython*.*
+/examples/*.pdf
+/examples/__pycache__
+/rulesets/ca.c
+ca.c
+/ignore/*.*
