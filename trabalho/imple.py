@@ -10,32 +10,32 @@ pdf = PdfPages("resposta_inflamatoria_estocastica.pdf")
 # Tempo final 
 tf = 500
 
-# Parâmetros 
-kpg = 0.3
-sm = 0.005
-kpn = 1.8
-micro_n = 0.05
-sc = 0.0125
-micro_c = 0.1
-knp = 0.1
-pinf = 20
-micro_m = 0.002
-snr = 0.08
-kdn = 0.35
-kcn = 0.04
-cinf = 0.28
-knd = 0.02
-kpm = 0.6
-kmp = 0.01
-micro_nr = 0.12
-micro_d = 0.02
-kcnd = 48
-xdn = 0.06
-knn = 0.01
-muj = 0.12
-mud = 0.02
-mu_c = 0.1
-sigma = 0.02
+# Parâmetros
+kpg = 0.3  # Taxa de crescimento da população de patógenos
+sm = 0.005  # Parâmetro relacionado à resistência do organismo (possivelmente relacionado à imunidade ou à resposta do sistema)
+kpn = 1.8  # Taxa de proliferação dos patógenos em função da população de fagócitos
+micro_n = 0.05  # Taxa de produção de fagócitos
+sc = 0.0125  # Taxa de aumento dos mediadores anti-inflamatórios
+micro_c = 0.1  # Taxa de produção de mediadores anti-inflamatórios
+knp = 0.1  # Taxa de proliferação dos patógenos devido à interação com os fagócitos
+pinf = 20  # População máxima de patógenos
+micro_m = 0.002  # Taxa de crescimento de mediadores
+snr = 0.08  # Taxa de interação entre fagócitos e mediadores
+kdn = 0.35  # Taxa de produção de dano tecidual devido à interação entre fagócitos e mediadores
+kcn = 0.04  # Taxa de modulação de mediadores
+cinf = 0.28  # Nível máximo de mediadores anti-inflamatórios
+knd = 0.02  # Taxa de modulação do dano tecidual
+kpm = 0.6  # Taxa de modulação do patógeno pelos mediadores
+kmp = 0.01  # Taxa de modulação do mediador pelos patógenos
+micro_nr = 0.12  # Taxa de produção de células fagocíticas
+micro_d = 0.02  # Taxa de produção de dano tecidual
+kcnd = 48  # Parâmetro de modulação entre dano tecidual e mediadores
+xdn = 0.06  # Parâmetro relacionado ao dano tecidual
+knn = 0.01  # Taxa de interação entre fagócitos e mediadores
+muj = 0.12  # Taxa de degradação de fagócitos
+mud = 0.02  # Taxa de degradação do dano tecidual
+mu_c = 0.1  # Taxa de degradação dos mediadores
+sigma = 0.02  # Desvio padrão do ruído estocástico aplicado no modelo
 
 def f(x, CA=0.125, cinf=0.28):
     return x / (1 + (CA/cinf)**2)
